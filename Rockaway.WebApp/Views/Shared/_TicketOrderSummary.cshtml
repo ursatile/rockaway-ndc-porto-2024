@@ -1,0 +1,63 @@
+@model Rockaway.WebApp.Models.OrderConfirmationPostData
+
+<div class="row">
+	<div class="col-12 col-md-8 offset-md-2">
+		<h1>Order Confirmation</h1>
+		<hr />
+	</div>
+	<div class="col-12 col-md-4 offset-md-2">
+		<h4>@Model.TicketOrder.Headliner</h4>
+		<p>
+			@if (Model.TicketOrder.HasSupport) {
+				<strong>Plus special guests:</strong>
+				@Model.TicketOrder.SupportArtistsText
+			} else {
+				<em>No support</em>
+			}
+		</p>
+	</div>
+	<div class="col-12 col-md-4 text-end">
+		<p>
+			@Model.TicketOrder.VenueSummary<br />
+			@Model.TicketOrder.Date
+		</p>
+	</div>
+</div>
+<div class="row" style="font-weight: bold;">
+	<div class="col-6 col-md-4 offset-md-2">
+		Ticket Type
+	</div>
+	<div class="col-3 col-md-2 text-end">
+		Price
+	</div>
+	<div class="col-3 col-md-2 text-end">
+		Total
+	</div>
+</div>
+
+@foreach (var item in Model.TicketOrder.Contents) {
+	<div class="row">
+		<div class="col-6 col-md-4 offset-md-2">
+			@item.Description
+		</div>
+		<div class="col-3 col-md-2 text-end">
+			@item.UnitPrice
+		</div>
+		<div class="col-3 col-md-2 text-end">
+			@item.TotalPrice
+		</div>
+	</div>
+}
+<div class="row">
+	<div class="col-12 col-md-8 offset-md-2">
+		<hr />
+	</div>
+</div>
+<div class="row">
+	<div class="col-8 col-md-6 offset-md-2">
+		<strong>Total</strong>
+	</div>
+	<div class="col-4 col-md-2 text-end">
+		@Model.TicketOrder.FormattedTotalPrice
+	</div>
+</div>

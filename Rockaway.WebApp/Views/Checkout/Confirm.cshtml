@@ -1,0 +1,95 @@
+@model Rockaway.WebApp.Models.OrderConfirmationPostData
+
+<div class="row">
+	<div class="col-12 col-md-8 offset-md-2">
+		<h1>Order Confirmation</h1>
+		<hr />
+	</div>
+	<div class="col-12 col-md-4 offset-md-2">
+		<h4>@Model.TicketOrder.Headliner</h4>
+		<p>
+			@if (Model.TicketOrder.HasSupport) {
+				<strong>Plus special guests:</strong>
+				@Model.TicketOrder.SupportArtistsText
+			} else {
+				<em>No support</em>
+			}
+		</p>
+	</div>
+	<div class="col-12 col-md-4 text-end">
+		<p>
+			@Model.TicketOrder.VenueSummary<br />
+			@Model.TicketOrder.Date
+		</p>
+	</div>
+</div>
+@foreach (var item in Model.TicketOrder.Contents) {
+	<div class="row">
+		<div class="col-6 col-md-4 offset-md-2">
+			@item.Description
+		</div>
+		<div class="col-3 col-md-2 text-end">
+			@item.UnitPrice
+		</div>
+		<div class="col-3 col-md-2 text-end">
+			@item.TotalPrice
+		</div>
+	</div>
+}
+<div class="row">
+	<div class="col-12 col-md-8 offset-md-2">
+		<hr />
+	</div>
+</div>
+<div class="row">
+	<div class="col-8 col-md-6 offset-md-2">
+		<strong>Total</strong>
+	</div>
+	<div class="col-4 col-md-2 text-end">
+		@Model.TicketOrder.FormattedTotalPrice
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 col-md-8 offset-md-2">
+		<hr />
+	</div>
+</div>
+<form method="post">
+	<input type="hidden" asp-for="TicketOrderId" />
+	<div class="row align-items-center">
+		<div class="col-12 col-md-2 offset-md-2">
+			<label asp-for="@Model.CustomerName" class="control-label"></label>
+		</div>
+		<div class="col-12 col-md-6">
+			<input asp-for="CustomerName" class="form-control" placeholder="Full Name" />
+			<span class="form-text text-danger" asp-validation-for="@Model.CustomerName"></span>
+		</div>
+	</div>
+	<div class="row align-items-center">
+		<div class="col-12 col-md-2 offset-md-2">
+			<label asp-for="@Model.CustomerEmail" class="control-label"></label>
+		</div>
+		<div class="col-12 col-md-6">
+			<input asp-for="CustomerEmail" class="form-control" placeholder="name@example.com" />
+			<span class="form-text text-danger" asp-validation-for="@Model.CustomerEmail"></span>
+		</div>
+	</div>
+	<div class="row align-items-center">
+		<div class="col-8 col-md-5 offset-md-2">
+			<label asp-for="@Model.AgreeToPayment">
+				<input type="checkbox" asp-for="@Model.AgreeToPayment" />
+				I agree to pay @Model.TicketOrder.FormattedTotalPrice on the door
+			</label>
+			<span class="form-text text-danger" style="display: block;" asp-validation-for="@Model.AgreeToPayment"></span>
+		</div>
+		<div class="col-4 col-md-3 text-end">
+			<input class="btn btn-primary" type="submit" name="submit" value="Confirm Order" />
+		</div>
+	</div>
+</form>
+ 
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

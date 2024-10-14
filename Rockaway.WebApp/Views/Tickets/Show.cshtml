@@ -1,0 +1,32 @@
+@model Rockaway.WebApp.Models.ShowViewData
+<h1>@Model.HeadlineArtistName</h1>
+<p>@Model.VenueName, @Model.VenueAddress</p>
+<p>@Model.ShowDate</p>
+
+<form method="post">
+	<section class="row">
+		<div class="col-6 col-md-4 offset-md-2">
+			<strong>Ticket Type</strong>
+		</div>
+		<div class="col-3 col-md-2">
+			<strong>Price</strong>
+		</div>
+		<div class="col-3 col-md-2 text-end">
+			<strong>Quantity</strong>
+		</div>
+	</section>
+	@foreach (var tt in Model.TicketTypes) {
+		<section class="row">
+			<div class="col-6 col-md-4 offset-md-2">@tt.Name</div>
+			<div class="col-3 col-md-2">@tt.FormattedPrice</div>
+			<div class="col-3 col-md-2 text-end">
+				<input type="number" name="tickets[@tt.Id]" value="0" min="0" max="10" />
+			</div>
+		</section>
+	}
+	<section class="row">
+		<div class="col-12 col-md-8 offset-md-2 text-end">
+			<input type="submit" class="btn btn-primary" value="Next &gt;" />
+		</div>
+	</section>
+</form>

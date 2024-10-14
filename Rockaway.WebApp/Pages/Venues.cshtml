@@ -1,0 +1,23 @@
+@page
+@using Rockaway.WebApp.Data
+@model VenuesModel
+
+<h1>Venues</h1>
+@foreach (var venue in Model.Venues.OrderBy(v => v.Name)) {
+	<div class="row">
+		<div class="col-2">
+			@venue.Name
+		</div>
+		<div class="col-4">
+			@venue.Address, @venue.City @venue.PostalCode<br />
+			@Country.FromCode(venue.CountryCode)?.Name
+		</div>
+		<div class="col-2">@venue.Telephone</div>
+		<div class="col-4">
+			<a href="@venue.WebsiteUrl">
+				@venue.WebsiteUrl
+			</a>
+		</div>
+	</div>
+}
+

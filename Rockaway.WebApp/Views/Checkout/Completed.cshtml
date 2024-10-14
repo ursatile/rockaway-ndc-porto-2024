@@ -1,0 +1,60 @@
+@model Rockaway.WebApp.Models.TicketOrderViewData
+
+<div class="row">
+	<div class="col-12 col-md-8 offset-md-2">
+		<h1>Order Confirmed!</h1>
+		<hr />
+		<p>
+			<strong>Order Reference:</strong>
+			@Model.Reference
+		</p>
+		<p>We've sent a confirmation email to @Model.CustomerEmail</p>
+		<hr />
+	</div>
+	<div class="col-12 col-md-4 offset-md-2">
+		<h4>@Model.Headliner</h4>
+		<p>
+			@if (Model.HasSupport) {
+				<strong>Plus special guests:</strong>
+				@Model.SupportArtistsText
+			}
+		</p>
+	</div>
+	<div class="col-12 col-md-4 text-end">
+		<p>
+			@Model.VenueSummary<br />
+			@Model.Date
+		</p>
+	</div>
+</div>
+@foreach (var item in Model.Contents) {
+	<div class="row">
+		<div class="col-6 col-md-4 offset-md-2">
+			@item.Description
+		</div>
+		<div class="col-3 col-md-2 text-end">
+			@item.UnitPrice
+		</div>
+		<div class="col-3 col-md-2 text-end">
+			@item.TotalPrice
+		</div>
+	</div>
+}
+<div class="row">
+	<div class="col-12 col-md-8 offset-md-2">
+		<hr />
+	</div>
+</div>
+<div class="row">
+	<div class="col-8 col-md-6 offset-md-2">
+		<strong>Total</strong>
+	</div>
+	<div class="col-4 col-md-2 text-end">
+		@Model.FormattedTotalPrice
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 col-md-8 offset-md-2">
+		<hr />
+	</div>
+</div>

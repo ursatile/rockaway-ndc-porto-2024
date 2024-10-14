@@ -1,0 +1,7 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Rockaway.WebApp.Models.ArtistViewData
+
+<div>
+	<h4><a asp-page="/Artist" asp-route-slug="@Model.Slug">@Model.Name</a></h4>
+</div>
+<p>@Model.Description</p>

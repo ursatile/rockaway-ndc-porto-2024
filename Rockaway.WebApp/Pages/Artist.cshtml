@@ -1,0 +1,37 @@
+@page "/artist/{slug}"
+@model ArtistModel
+<article class="row">
+	<section class="col-12 col-md-4">
+		@Html.DisplayFor(model => model.Artist)
+	</section>
+	<section class="col-12 col-md-8">
+		<h2>@Model.Artist.Name On Tour</h2>
+		@if (Model.Artist.Shows.Any()) {
+			foreach (var show in Model.Artist.Shows) {
+				<hr />
+				<div class="row">
+					<div class="col-9">
+						<strong>@show.ShowDate</strong><br />
+						<country-flag iso-code="@show.CountryCode"></country-flag>
+						@show.VenueName, @show.VenueAddress
+					</div>
+					<div class="col-3 text-end">
+						<a class="btn btn-primary"
+						   asp-action="show"
+						   asp-controller="tickets"
+						   asp-all-route-data="@show.RouteData">tickets</a>
+					</div>
+				</div>
+				<div>
+				</div>
+				@if (show.SupportActs.Any()) {
+					<div>
+						<strong>Support</strong>: @String.Join(", ", show.SupportActs)
+					</div>
+				}
+			}
+		} else {
+			<p>No tour dates scheduled.</p>
+		}
+	</section>
+</article>

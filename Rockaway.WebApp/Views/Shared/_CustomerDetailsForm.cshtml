@@ -1,0 +1,20 @@
+@model Rockaway.WebApp.Models.OrderConfirmationPostData
+
+<div class="row align-items-center">
+	<div class="col-12 col-md-2 offset-md-2">
+		<label asp-for="@Model.CustomerName" class="control-label"></label>
+	</div>
+	<div class="col-12 col-md-6">
+		<input asp-for="CustomerName" class="form-control" placeholder="Full Name" />
+		<span class="form-text text-danger" asp-validation-for="@Model.CustomerName"></span>
+	</div>
+</div>
+<div class="row align-items-center">
+	<div class="col-12 col-md-2 offset-md-2">
+		<label asp-for="@Model.CustomerEmail" class="control-label"></label>
+	</div>
+	<div class="col-12 col-md-6">
+		<input asp-for="CustomerEmail" class="form-control" placeholder="name@example.com" />
+		<span class="form-text text-danger" asp-validation-for="@Model.CustomerEmail"></span>
+	</div>
+</div>
