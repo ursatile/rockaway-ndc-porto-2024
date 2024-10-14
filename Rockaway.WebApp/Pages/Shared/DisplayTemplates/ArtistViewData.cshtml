@@ -1,7 +1,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Rockaway.WebApp.Models.ArtistViewData
 
-<div>
+<div class="artist-card @Model.CssClass" style="background-image: url(@Model.GetImageUrl(600,450))">
 	<h4><a asp-page="/Artist" asp-route-slug="@Model.Slug">@Model.Name</a></h4>
 </div>
 <p>@Model.Description</p>

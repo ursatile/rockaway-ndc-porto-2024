@@ -202,3 +202,60 @@ body {
 		}
 	}
 }
+
+
+@mixin flex-grid-column {
+	@include make-col-ready();
+
+	@include media-breakpoint-up(sm) {
+		@include make-col(6);
+	}
+
+	@include media-breakpoint-up(md) {
+		@include make-col(4);
+	}
+
+	@include media-breakpoint-up(lg) {
+		@include make-col(3);
+	}
+
+	@include media-breakpoint-up(xxl) {
+		@include make-col(2);
+	}
+}
+
+.artist-gallery {
+	@include make-row();
+
+	section {
+		@include flex-grid-column;
+		margin-bottom: 16px;
+	}
+}
+
+div.artist-card {
+	border-radius: $border-radius;
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 240px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+
+	&.long-name h4 {
+		font-size: 1.2em;
+	}
+
+	h4 {
+		background-color: rgba(0,0,0,0.8);
+		padding: calc($container-padding-x / 2);
+		margin: 0;
+		border-radius: 0 0 $border-radius $border-radius;
+
+		a {
+			color: #fff;
+			text-decoration: none;
+		}
+	}
+}
