@@ -4,7 +4,6 @@ using Rockaway.WebApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("admin", "/"));
 builder.Services.AddControllersWithViews(options => {
 	options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
