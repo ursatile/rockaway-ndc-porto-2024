@@ -40,6 +40,11 @@ if (builder.Environment.UseSqlite()) {
 
 builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<RockawayDbContext>();
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
+
+#if DEBUG && !NCRUNCH
+builder.Services.AddSassCompiler();
+#endif
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
