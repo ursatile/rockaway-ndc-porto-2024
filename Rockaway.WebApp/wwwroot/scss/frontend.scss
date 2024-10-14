@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
 @import "../lib/bootstrap/scss/functions";
 
@@ -9,7 +11,7 @@
 $font-family-sans-serif: 'Titillium Web', Arial, Helvetica, sans-serif;
 $body-color-dark: #ddd;
 $body-bg-dark: #000;
-$primary: #660099;
+$primary: #0033ff;
 
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
 @import "../lib/bootstrap/scss/variables";
@@ -38,3 +40,82 @@ $primary: #660099;
 @import "../lib/bootstrap/scss/utilities/api";
 
 // 8. Add additional custom code here
+
+html {
+	background: linear-gradient(150deg, color.scale($primary, $lightness: -70%) 0%, color.scale($primary, $lightness: -50%) 50%, color.scale($primary, $lightness: -80%) 100%);
+	background-attachment: fixed;
+}
+
+body {
+	background: transparent;
+}
+
+@mixin fancy-panel($panel-color: color.scale($primary, $lightness: -75%)) {
+	margin: $grid-gutter-width 0;
+	border-radius: 2 * $border-radius;
+	padding: 2 * $border-radius;
+	background-color: $panel-color;
+	border: 1px solid $body-color;
+}
+
+body {
+	> header {
+		@include fancy-panel;
+		display: flex;
+		justify-content: space-between;
+
+		h1 a {
+			display: block;
+			font-size: 0;
+			height: 38px;
+			width: 200px;
+			background: url(/img/rockaway-logotype.svg) left center no-repeat;
+		}
+
+		nav {
+			a {
+				background: $primary;
+				display: inline-block;
+				padding: 4px 16px;
+				color: $btn-color;
+				font-size: 120%;
+				border-radius: $border-radius;
+				text-decoration: none;
+
+				&:hover {
+					color: $body-color;
+					background: color.scale($primary, $lightness: -50%);
+				}
+			}
+		}
+	}
+
+	> main {
+		@include fancy-panel;
+	}
+
+	> footer {
+		@include fancy-panel;
+		font-size: 80%;
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: space-between;
+
+		nav {
+			a {
+				color: $btn-color;
+				display: inline-block;
+				border-left: 1px solid #fff;
+				padding: 0 0.5em;
+			}
+
+			a:first-child {
+				border: none;
+			}
+
+			a:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+}

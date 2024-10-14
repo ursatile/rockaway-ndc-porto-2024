@@ -1,51 +1,33 @@
-@{ Layout = "_Base"; }
-
+@{
+	Layout = "_Base";
+}
 @section head {
 	@await RenderSectionAsync("Head", required: false)
 }
 <header>
-	<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-		<div class="container">
-			<a class="navbar-brand" asp-area="" asp-page="/Index">Rockaway.WebApp</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-			        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-				<ul class="navbar-nav flex-grow-1">
-					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="Artists">Artists</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="Venues">Venues</a>
-					</li>
-				</ul>
-			</div>
-		</div>
+	<h1>
+		<a asp-area="" asp-page="/Index" asp-page="/Index">Rockaway</a>
+	</h1>
+	<nav>
+		<a asp-action="Index" asp-controller="Artists">Artists</a>
+		<a asp-action="Index" asp-controller="Venues">Venues</a>
 	</nav>
 </header>
-<div class="container">
-	<main role="main" class="pb-3">
-		@RenderBody()
-	</main>
-</div>
-
-<footer class="border-top footer text-muted">
-	<div class="container">
-		&copy; 2024 - <a href="/">Rockaway</a>
-		-
-		<a asp-area="" asp-page="/Privacy">Privacy</a>
-		-
-		<a asp-area="Admin" asp-page="/Index">Admin</a>
-	</div>
+<main>
+	@RenderBody()
+</main>
+<footer>
+	<span>
+		&copy; 2024 Rockaway <a id="admin-login" href="/admin">admin login</a>
+	</span>
+	<nav>
+		<a asp-page="/about">about us</a>
+		<a asp-page="/contact">contact us</a>
+		<a asp-page="/privacy">privacy policy</a>
+		<a asp-page="/terms">terms &amp; conditions</a>
+		<a href="/status">system status</a>
+	</nav>
 </footer>
-
 @section scripts {
 	@await RenderSectionAsync("Scripts", required: false)
 }
