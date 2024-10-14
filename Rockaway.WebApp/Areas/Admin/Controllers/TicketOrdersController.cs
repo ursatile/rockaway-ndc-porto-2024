@@ -56,7 +56,8 @@ public class TicketOrdersController(RockawayDbContext context) : Controller {
 		try {
 			context.Update(ticketOrder);
 			await context.SaveChangesAsync();
-		} catch (DbUpdateConcurrencyException) {
+		}
+		catch (DbUpdateConcurrencyException) {
 			if (!TicketOrderExists(ticketOrder.Id)) return NotFound();
 			throw;
 		}

@@ -1,13 +1,16 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Rockaway.WebApp.Data;
+using Rockaway.WebApp.Hosting;
 using Rockaway.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IStatusReporter>(new StatusReporter());
 
-builder.Services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("admin", "/"));
+builder.Services.AddRazorPages(options
+	=> options.Conventions.AuthorizeAreaFolder("admin", "/"));
+
 builder.Services.AddControllersWithViews(options => {
 	options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
 });
@@ -17,10 +20,24 @@ builder.Services.AddRazorPages();
 
 var logger = CreateAdHocLogger<Program>();
 logger.LogInformation("Rockaway running in {environment} environment", builder.Environment.EnvironmentName);
-logger.LogInformation("Using Sqlite database");
-var sqliteConnection = new SqliteConnection("Data Source=:memory:");
-sqliteConnection.Open();
-builder.Services.AddDbContext<RockawayDbContext>(options => options.UseSqlite(sqliteConnection));
+
+if (builder.Environment.UseSqlite()) {
+	logger.LogInformation("Using Sqlite database");
+	// var sqliteConnection = new SqliteConnection($"Data Source=rockaway;Mode=Memory;Cache=Shared");
+	var sqliteConnection = new SqliteConnection($"Data Source=:memory:");
+	sqliteConnection.Open();
+	builder.Services.AddDbContext<RockawayDbContext>(options => options.UseSqlite(sqliteConnection));
+} else {
+	logger.LogInformation("Using SQL Server database");
+	var connectionString = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+	builder.Services.AddDbContext<RockawayDbContext>(options => options.UseSqlServer(connectionString));
+}
+
+//logger.LogInformation("Using Sqlite database");
+//var sqliteConnection = new SqliteConnection("Data Source=:memory:");
+//sqliteConnection.Open();
+//builder.Services.AddDbContext<RockawayDbContext>(options => options.UseSqlite(sqliteConnection));
+
 builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<RockawayDbContext>();
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 var app = builder.Build();
@@ -32,9 +49,15 @@ if (!app.Environment.IsDevelopment()) {
 	app.UseHsts();
 }
 
-using (var scope = app.Services.CreateScope()) {
-	using var db = scope.ServiceProvider.GetService<RockawayDbContext>()!;
+using var scope = app.Services.CreateScope();
+using var db = scope.ServiceProvider.GetService<RockawayDbContext>()!;
+if (builder.Environment.UseSqlite()) {
 	db.Database.EnsureCreated();
+} else if (Boolean.TryParse(app.Configuration["apply-migrations"], out var applyMigrations) && applyMigrations) {
+	logger.LogInformation("apply-migrations=true was specified. Applying EF migrations and then exiting.");
+	db.Database.Migrate();
+	logger.LogInformation("EF database migrations applied successfully.");
+	Environment.Exit(0);
 }
 
 app.UseHttpsRedirection();

@@ -39,6 +39,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
+      - name: Migrate SQL database
+        run: dotnet Rockaway.WebApp.dll -- --e ConnectionStrings:AZURE_SQL_CONNECTIONSTRING="${{ secrets.AZURE_SQL_CONNECTIONSTRING }}" apply-migrations=true
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3

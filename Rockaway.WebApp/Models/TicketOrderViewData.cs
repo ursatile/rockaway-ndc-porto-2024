@@ -15,7 +15,7 @@ public class TicketOrderViewData(TicketOrder ticketOrder) {
 	public string Reference { get; } = ticketOrder.Reference;
 
 	public string SupportArtistsText { get; }
-		= String.Join(" + ", ticketOrder.Show.SupportArtists.Select(a => a.Name)); 
+		= String.Join(" + ", ticketOrder.Show.SupportArtists.Select(a => a.Name));
 
 	public IEnumerable<TicketOrderItemViewData> Contents { get; }
 		= ticketOrder.Contents.Select(item => new TicketOrderItemViewData(item));
