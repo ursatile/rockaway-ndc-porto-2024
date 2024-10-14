@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Rockaway.WebApp.Data;
+using Rockaway.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<IStatusReporter>(new StatusReporter());
 
 builder.Services.AddRazorPages(options => options.Conventions.AuthorizeAreaFolder("admin", "/"));
 builder.Services.AddControllersWithViews(options => {
@@ -42,6 +45,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.MapGet("/status", (IStatusReporter reporter) => reporter.GetStatus());
 
 app.MapAreaControllerRoute(
 	name: "admin",
