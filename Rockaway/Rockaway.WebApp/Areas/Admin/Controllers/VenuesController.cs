@@ -1,46 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Rockaway.WebApp.Data;
 using Rockaway.WebApp.Data.Entities;
 
 namespace Rockaway.WebApp.Areas.Admin.Controllers {
 	[Area("Admin")]
-	public class VenuesController : Controller {
-		private readonly RockawayDbContext _context;
+	public class VenuesController(RockawayDbContext context) : Controller {
+		public async Task<IActionResult> Index()
+			=> View(await context.Venues.ToListAsync());
 
-		public VenuesController(RockawayDbContext context) {
-			_context = context;
-		}
-
-		// GET: Admin/Venues
-		public async Task<IActionResult> Index() {
-			return View(await _context.Venues.ToListAsync());
-		}
-
-		// GET: Admin/Venues/Details/5
 		public async Task<IActionResult> Details(Guid? id) {
-			if (id == null) {
-				return NotFound();
-			}
-
-			var venue = await _context.Venues
-				.FirstOrDefaultAsync(m => m.Id == id);
-			if (venue == null) {
-				return NotFound();
-			}
-
+			if (id == null) return NotFound();
+			var venue = await context.Venues.FirstOrDefaultAsync(m => m.Id == id);
+			if (venue == null) return NotFound();
 			return View(venue);
 		}
 
 		// GET: Admin/Venues/Create
-		public IActionResult Create() {
-			return View();
-		}
+		public IActionResult Create() => View();
 
 		// POST: Admin/Venues/Create
 		// To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -48,13 +23,16 @@ namespace Rockaway.WebApp.Areas.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create([Bind("Id,Name,Slug,Address,City,CultureName,PostalCode,Telephone,WebsiteUrl")] Venue venue) {
-			if (ModelState.IsValid) {
-				venue.Id = Guid.NewGuid();
-				_context.Add(venue);
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
+			if (Country.FromCode(venue.CountryCode) == null) {
+				ModelState.AddModelError("CultureName", $"Sorry, we couldn't match '{venue.CultureName}' with a country in our database.");
 			}
-			return View(venue);
+
+			if (!ModelState.IsValid) return View(venue);
+
+			venue.Id = Guid.NewGuid();
+			context.Add(venue);
+			await context.SaveChangesAsync();
+			return RedirectToAction(nameof(Index));
 		}
 
 		// GET: Admin/Venues/Edit/5
@@ -63,7 +41,7 @@ namespace Rockaway.WebApp.Areas.Admin.Controllers {
 				return NotFound();
 			}
 
-			var venue = await _context.Venues.FindAsync(id);
+			var venue = await context.Venues.FindAsync(id);
 			if (venue == null) {
 				return NotFound();
 			}
@@ -76,14 +54,19 @@ namespace Rockaway.WebApp.Areas.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Slug,Address,City,CultureName,PostalCode,Telephone,WebsiteUrl")] Venue venue) {
+
 			if (id != venue.Id) {
 				return NotFound();
 			}
 
+			if (Country.FromCode(venue.CountryCode) == null) {
+				ModelState.AddModelError("CultureName", $"Sorry, we couldn't match '{venue.CultureName}' with a country in our database.");
+			}
+
 			if (ModelState.IsValid) {
 				try {
-					_context.Update(venue);
-					await _context.SaveChangesAsync();
+					context.Update(venue);
+					await context.SaveChangesAsync();
 				}
 				catch (DbUpdateConcurrencyException) {
 					if (!VenueExists(venue.Id)) {
@@ -103,7 +86,7 @@ namespace Rockaway.WebApp.Areas.Admin.Controllers {
 				return NotFound();
 			}
 
-			var venue = await _context.Venues
+			var venue = await context.Venues
 				.FirstOrDefaultAsync(m => m.Id == id);
 			if (venue == null) {
 				return NotFound();
@@ -116,17 +99,17 @@ namespace Rockaway.WebApp.Areas.Admin.Controllers {
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(Guid id) {
-			var venue = await _context.Venues.FindAsync(id);
+			var venue = await context.Venues.FindAsync(id);
 			if (venue != null) {
-				_context.Venues.Remove(venue);
+				context.Venues.Remove(venue);
 			}
 
-			await _context.SaveChangesAsync();
+			await context.SaveChangesAsync();
 			return RedirectToAction(nameof(Index));
 		}
 
 		private bool VenueExists(Guid id) {
-			return _context.Venues.Any(e => e.Id == id);
+			return context.Venues.Any(e => e.Id == id);
 		}
 	}
 }
