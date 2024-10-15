@@ -94,4 +94,13 @@ public class RockawayDbContext(DbContextOptions<RockawayDbContext> options)
 			.HasData(SampleData.Users.Admin);
 
 	}
+
+	public async Task<Venue?> FindVenueWithShowsAndArtistsAsync(Guid id)
+		=> await Venues
+		.Include(v => v.Shows)
+		.ThenInclude(show => show.HeadlineArtist)
+		.Include(v => v.Shows)
+		.ThenInclude(show => show.SupportSlots)
+		.ThenInclude(slot => slot.Artist)
+		.FirstOrDefaultAsync(m => m.Id == id);
 }

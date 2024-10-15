@@ -1,3 +1,4 @@
+using Rockaway.WebApp.Areas.Admin.Models;
 using Rockaway.WebApp.Data;
 using Rockaway.WebApp.Data.Entities;
 
@@ -9,9 +10,10 @@ namespace Rockaway.WebApp.Areas.Admin.Controllers {
 
 		public async Task<IActionResult> Details(Guid? id) {
 			if (id == null) return NotFound();
-			var venue = await context.Venues.FirstOrDefaultAsync(m => m.Id == id);
+			var venue = await context.FindVenueWithShowsAndArtistsAsync(id.Value);
 			if (venue == null) return NotFound();
-			return View(venue);
+			var model = new VenueViewModel(venue);
+			return View(model);
 		}
 
 		// GET: Admin/Venues/Create
