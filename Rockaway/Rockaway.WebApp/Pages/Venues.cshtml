@@ -9,7 +9,8 @@
 			@venue.Name
 		</div>
 		<div class="col-4">
-			@venue.Address, @venue.City @venue.PostalCode<br />
+			<flag country="@venue.CountryCode" />
+			@venue.Address, @venue.City @venue.PostalCode<br/>
 			@Country.FromCode(venue.CountryCode)?.Name
 		</div>
 		<div class="col-2">@venue.Telephone</div>
