@@ -72,4 +72,6 @@ public class Venue {
 
 	public string FullAddress => String.Join(", ", AddressTokens.Where(s => !String.IsNullOrWhiteSpace(s)));
 	public string Summary => String.Join(", ", SummaryTokens.Where(s => !String.IsNullOrWhiteSpace(s)));
+
+	public Show CreateShow() => new() { Venue = this };
 }

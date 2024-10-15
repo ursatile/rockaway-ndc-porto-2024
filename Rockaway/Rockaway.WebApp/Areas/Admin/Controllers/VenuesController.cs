@@ -5,6 +5,8 @@ using Rockaway.WebApp.Data.Entities;
 namespace Rockaway.WebApp.Areas.Admin.Controllers {
 	[Area("Admin")]
 	public class VenuesController(RockawayDbContext context) : Controller {
+
+
 		public async Task<IActionResult> Index()
 			=> View(await context.Venues.ToListAsync());
 
@@ -16,7 +18,28 @@ namespace Rockaway.WebApp.Areas.Admin.Controllers {
 			return View(model);
 		}
 
-		// GET: Admin/Venues/Create
+		[HttpGet]
+		public async Task<IActionResult> AddShow(string id) {
+			var venue = await context.FindVenueWithShowsAndArtistsAsync(id);
+			if (venue == null) return NotFound();
+			var show = venue.CreateShow();
+			var model = new ShowPostModel(show);
+			return View(model);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> AddShow(string venueSlug, ShowPostModel post) {
+			if (!ModelState.IsValid) return View(post);
+			var venue = await context.FindVenueWithShowsAndArtistsAsync(venueSlug);
+			if (venue == null) return NotFound();
+			var headlineArtist = await context.Artists.FindAsync(post.HeadlineArtistId);
+			var date = LocalDate.FromDateTime(post.Date);
+			var show = venue.BookShow(headlineArtist, date);
+			context.Add(show);
+			await context.SaveChangesAsync();
+			return RedirectToAction(nameof(Details), new { id = venue.Id });
+		}
+
 		public IActionResult Create() => View();
 
 		// POST: Admin/Venues/Create

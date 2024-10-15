@@ -1,0 +1,19 @@
+@model Rockaway.WebApp.Areas.Admin.Models.ShowPostModel
+@{
+	ViewBag.Title = "title";
+	Layout = "_AdminLayout";
+}
+<h2>@Model.VenueName: Add a Show</h2>
+
+<form asp-action="AddShow">
+	<input type="hidden" name="VenueSlug" value="@Model.VenueSlug" />
+	@Html.DisplayNameFor(show => show.Date)
+	@Html.EditorFor(show => show.Date)
+	<br />
+	@Html.DisplayNameFor(show => show.HeadlineArtistName)
+	<input type="text" asp-for="@Model.HeadlineArtistId" />
+	<input type="submit" />
+</form>
+
+
+

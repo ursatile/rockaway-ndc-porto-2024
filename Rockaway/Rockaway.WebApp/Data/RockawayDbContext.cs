@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Rockaway.WebApp.Data.Entities;
 using Rockaway.WebApp.Data.Sample;
+using static Rockaway.WebApp.Data.Sample.SampleData;
 
 namespace Rockaway.WebApp.Data;
 
@@ -95,12 +97,19 @@ public class RockawayDbContext(DbContextOptions<RockawayDbContext> options)
 
 	}
 
+	private IIncludableQueryable<Venue, Artist> VenuesWithShowsAndArtists
+		=> Venues
+			.Include(v => v.Shows)
+			.ThenInclude(show => show.HeadlineArtist)
+			.Include(v => v.Shows)
+			.ThenInclude(show => show.SupportSlots)
+			.ThenInclude(slot => slot.Artist);
+
+	public async Task<Venue?> FindVenueWithShowsAndArtistsAsync(string slug)
+		=> await VenuesWithShowsAndArtists
+			.FirstOrDefaultAsync(venue => venue.Slug == slug);
+
 	public async Task<Venue?> FindVenueWithShowsAndArtistsAsync(Guid id)
-		=> await Venues
-		.Include(v => v.Shows)
-		.ThenInclude(show => show.HeadlineArtist)
-		.Include(v => v.Shows)
-		.ThenInclude(show => show.SupportSlots)
-		.ThenInclude(slot => slot.Artist)
-		.FirstOrDefaultAsync(m => m.Id == id);
+		=> await VenuesWithShowsAndArtists
+			.FirstOrDefaultAsync(m => m.Id == id);
 }

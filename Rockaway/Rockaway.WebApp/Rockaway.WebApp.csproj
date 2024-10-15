@@ -32,4 +32,10 @@
 	<ItemGroup>
 	  <None Include="wwwroot\scss\frontend.scss" />
 	</ItemGroup>
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Areas\Admin\Views\Venues\AddShow.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Areas\Admin\Views\Venues\AddShow.cshtml" />
+	</ItemGroup>
 </Project>
