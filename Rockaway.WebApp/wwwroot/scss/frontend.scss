@@ -11,7 +11,7 @@
 $font-family-sans-serif: 'Titillium Web', Arial, Helvetica, sans-serif;
 $body-color-dark: #ddd;
 $body-bg-dark: #000;
-$primary: #0033ff;
+$primary: #660099;
 
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
 @import "../lib/bootstrap/scss/variables";
@@ -186,6 +186,7 @@ body {
 
 		@include smartphone {
 			margin-bottom: 0;
+			font-size: 125%;
 
 			span, nav {
 				width: 100%;
