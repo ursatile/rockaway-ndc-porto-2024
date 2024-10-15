@@ -1,4 +1,4 @@
-@model Rockaway.WebApp.Data.Entities.Venue
+﻿@model Rockaway.WebApp.Data.Entities.Venue
 
 @{
     ViewData["Title"] = "Delete";
@@ -36,10 +36,10 @@
             @Html.DisplayFor(model => model.City)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CountryCode)
+            @Html.DisplayNameFor(model => model.CultureName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CountryCode)
+            @Html.DisplayFor(model => model.CultureName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.PostalCode)
