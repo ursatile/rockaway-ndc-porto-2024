@@ -1,0 +1,76 @@
+@using Rockaway.WebApp.Models
+<section class="row">
+	<div class="col-6 col-md-4 offset-md-2">
+		<strong>Ticket Type</strong>
+	</div>
+	<div class="col-3 col-md-2">
+		<strong>Quantity</strong>
+	</div>
+	<div class="col-3 col-md-2">
+		<strong>Price</strong>
+	</div>
+</section>
+@foreach (var tt in TicketTypes)
+{
+	<section class="row">
+		<div class="col-6 col-md-4 offset-md-2">
+			<span>
+				@tt.Name <span class="price">(@Format(tt.Price))</span>
+			</span>
+		</div>
+		<div class="col-3 col-md-2">
+			<a class="fas fa-square-minus" @onclick="() => Decrement(tt.Id)"></a>
+			<input name="tickets[@tt.Id]" type="number" value="@quantities[tt.Id]" />
+			<a class="fas fa-square-plus" @onclick="() => Increment(tt.Id)"></a>
+		</div>
+		<div class="col-3 col-md-2">
+			@Format(LineTotal(tt))
+		</div>
+	</section>
+}
+<section class="row">
+	<div class="col-12 col-md-8 offset-md-2" style="display: block;">
+		<hr />
+	</div>
+</section>
+<section class="row">
+	<div class="col-6 col-md-4 offset-md-2">
+		<strong>Order Total:</strong>
+	</div>
+	<div class="col-3 col-md-2"></div>
+	<div class="col-3 col-md-2">
+		@Format(OrderTotal)
+	</div>
+</section>
+
+@code {
+
+	[Parameter]
+	public List<TicketTypeViewData> TicketTypes
+	{
+		get => ticketTypes;
+		set
+		{
+			ticketTypes = value;
+			quantities = ticketTypes.ToDictionary(tt => tt.Id, _ => 0);
+		}
+	}
+
+	[Parameter]
+	public string CultureName
+	{
+		get => cultureInfo.Name;
+		set => cultureInfo = CultureInfo.CreateSpecificCulture(value);
+	}
+
+	private Dictionary<Guid, int> quantities = new();
+	private List<TicketTypeViewData> ticketTypes = [];
+	private CultureInfo cultureInfo = CultureInfo.InvariantCulture;
+
+	private void Increment(Guid id) => quantities[id] = Math.Min(quantities[id] + 1, 8);
+	private void Decrement(Guid id) => quantities[id] = Math.Max(quantities[id] - 1, 0);
+
+	decimal LineTotal(TicketTypeViewData tt) => quantities[tt.Id] * tt.Price;
+	string Format(decimal price) => price.ToString("C", cultureInfo);
+	private decimal OrderTotal => ticketTypes.Sum(tt => tt.Price * quantities[tt.Id]);
+}

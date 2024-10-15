@@ -4,7 +4,6 @@
 	Layout = "_AdminLayout";
 }
 <h2>@Model.VenueName: Add a Show</h2>
-
 <form asp-action="AddShow">
 	<input type="hidden" name="VenueSlug" value="@Model.VenueSlug" />
 	@Html.DisplayNameFor(show => show.Date)
@@ -14,6 +13,31 @@
 	<input type="text" asp-for="@Model.HeadlineArtistId" />
 	<input type="submit" />
 </form>
+
+@section Scripts {
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+	<script>
+		const invalidDates = [
+			'@Html.Raw(String.Join("', '", Model.InvalidDates.Select(d => d.ToString("yyyyMMdd", CultureInfo.InvariantCulture))))'
+		];
+		function isVenueAlreadyBooked(date) {
+			var dateString = moment(date).format('YYYYMMDD');
+			console.log(dateString);
+			return invalidDates.includes(dateString);
+		}
+		$(function () {
+			$('input[name="Date"]').daterangepicker({
+				singleDatePicker: true,
+				showDropdowns: true,
+				minYear: 1901,
+				isInvalidDate: isVenueAlreadyBooked,
+				maxYear: parseInt(moment().format('YYYY'), 10)
+			});
+		});
+	</script>
+}
 
 
 

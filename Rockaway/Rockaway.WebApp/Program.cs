@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
+using Rockaway.WebApp.Components;
 using Rockaway.WebApp.Data;
 using Rockaway.WebApp.Hosting;
 using Rockaway.WebApp.Services;
@@ -15,6 +16,9 @@ builder.Services.AddControllersWithViews(options => {
 	options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
 });
 builder.Services.AddSingleton<IClock>(SystemClock.Instance);
+
+builder.Services.AddRazorComponents()
+	.AddInteractiveServerComponents();
 
 builder.Services.AddRazorPages();
 
@@ -83,5 +87,11 @@ app.MapAreaControllerRoute(
 ).RequireAuthorization();
 app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
 app.MapControllers();
+
+app.MapRazorComponents<App>()
+	.AddInteractiveServerRenderMode();
+
 app.Run();
+
+
 ILogger<T> CreateAdHocLogger<T>() => LoggerFactory.Create(lb => lb.AddConsole()).CreateLogger<T>();

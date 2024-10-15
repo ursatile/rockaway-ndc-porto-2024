@@ -1,0 +1,45 @@
+hr {
+	margin: 2px 0;
+}
+
+a.fas {
+	text-decoration: none;
+	font-size: 200%;
+	display: inline-block;
+}
+
+input[type=number] {
+	border: none;
+	background: none;
+	text-align: center;
+	font-weight: bold;
+	width: 2em;
+	appearance: textfield;
+}
+
+	input[type=number]::-webkit-inner-spin-button,
+	input[type=number]::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+.row div {
+	display: flex;
+	align-items: center;
+}
+
+.row :nth-child(1) {
+	justify-content: start;
+}
+
+.row :nth-child(2) {
+	justify-content: center;
+}
+
+.row :nth-child(3) {
+	justify-content: end;
+}
+
+span.price {
+	white-space: nowrap;
+}
