@@ -12,6 +12,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.SassCompiler" Version="1.79.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.10" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
@@ -37,5 +38,8 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <_ContentIncludedByDefault Remove="Areas\Admin\Views\Venues\AddShow.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Rockaway.RazorComponents\Rockaway.RazorComponents.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-@using Rockaway.WebApp.Models
+@using System.Globalization
 <section class="row">
 	<div class="col-6 col-md-4 offset-md-2">
 		<strong>Ticket Type</strong>
@@ -46,7 +46,7 @@
 @code {
 
 	[Parameter]
-	public List<TicketTypeViewData> TicketTypes
+	public List<TicketPickerItem> TicketTypes
 	{
 		get => ticketTypes;
 		set
@@ -64,13 +64,13 @@
 	}
 
 	private Dictionary<Guid, int> quantities = new();
-	private List<TicketTypeViewData> ticketTypes = [];
+	private List<TicketPickerItem> ticketTypes = [];
 	private CultureInfo cultureInfo = CultureInfo.InvariantCulture;
 
 	private void Increment(Guid id) => quantities[id] = Math.Min(quantities[id] + 1, 8);
 	private void Decrement(Guid id) => quantities[id] = Math.Max(quantities[id] - 1, 0);
 
-	decimal LineTotal(TicketTypeViewData tt) => quantities[tt.Id] * tt.Price;
+	decimal LineTotal(TicketPickerItem tt) => quantities[tt.Id] * tt.Price;
 	string Format(decimal price) => price.ToString("C", cultureInfo);
 	private decimal OrderTotal => ticketTypes.Sum(tt => tt.Price * quantities[tt.Id]);
 }
