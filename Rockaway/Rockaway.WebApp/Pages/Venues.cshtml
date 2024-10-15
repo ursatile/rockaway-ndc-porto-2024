@@ -4,12 +4,12 @@
 
 <h1>Venues</h1>
 @foreach (var venue in Model.Venues.OrderBy(v => v.Name)) {
-	<div class="row">
+	<div class="row venue-listing">
 		<div class="col-2">
 			@venue.Name
 		</div>
 		<div class="col-4">
-			<flag country="@venue.CountryCode" />
+			<country-flag iso-code="@venue.CountryCode" />
 			@venue.Address, @venue.City @venue.PostalCode<br/>
 			@Country.FromCode(venue.CountryCode)?.Name
 		</div>
